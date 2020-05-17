@@ -1,0 +1,175 @@
+@media only screen and (min-width: 480px) and (max-width: 768px) {
+    .container {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        width: 25%;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1366px) {
+    .container {
+        width: 25%;
+    }
+}
+
+@media only screen and (min-width: 1366px) {
+    .container {
+        width: 25%;
+    }
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    background-color: cornsilk;
+    margin-top: 30px;
+    padding: 30px;
+}
+
+h3, p {
+    margin: 0;
+}
+
+h4 {
+    margin: 0 0 10px 0;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+form {
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.user-review {
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.user-name {
+    display: flex;
+    font-weight: bold;
+}
+
+.container {
+    margin: 0 auto;
+}
+
+.stars {
+    margin-top: 5px;
+    color: crimson;
+    font-size: 25px;
+}
+
+.user-form {
+    margin-top: 10px;
+}
+
+.rating input[type="radio"] {
+    position: absolute;
+    cursor: pointer;
+    width: 17px;
+}
+
+.navbar {
+    color: crimson;
+    display: flex;
+    color: #ccc;
+    justify-content: space-between;
+    /* border-bottom: 1px solid #ccc; */
+    padding-bottom: 10px;
+    margin-bottom: 5px;
+}
+
+.rating span {
+    width: 24px;
+    height: 16px;
+    line-height: 16px;
+    padding: 1px 22px 1px 0;
+}
+
+textarea {
+    width: 100%;
+    box-sizing: border-box;
+    resize: none;
+}
+
+.isbn {
+    margin-top: 5px;
+}
+
+ul {
+    padding: 0;
+    list-style: none;
+    color: crimson;
+}
+
+.input-field {
+    display: inline-block;
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+.results {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    border-radius: 5px;
+}
+
+.book-card {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: lightblue;
+}
+
+.book-info {
+    display: flex;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    background-color: #ccc;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.route-link {
+    color: #45a049;
+}
+
+.button, input[type=submit] {
+    width: 100%;
+    background-color: cornflowerblue;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: cornflowerblue;
+}
+
+.rounded-corners {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}

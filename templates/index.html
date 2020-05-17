@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block main %}
+Welcome {{username}}!
+Please chose a channel or <a href="">create a new one</a>
+
+{% for channel in channels %}
+<li>{{channel.name}}</li>
+{% endfor %}
+
+{% endblock %}
