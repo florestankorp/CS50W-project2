@@ -15,62 +15,23 @@ app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 channels = [
-    Channel(
-        "channel 1",
-        [
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-        ],
-    ),
-    Channel(
-        "channel 2",
-        [
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-        ],
-    ),
-    Channel(
-        "channel 3",
-        [
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-        ],
-    ),
-    Channel(
-        "channel 4",
-        [
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-            Message("admin1", "001", "yoloooo"),
-        ],
-    ),
+    # Channel(
+    #     "channel 1",
+    #     [
+    #         Message("admin1", "001", "yoloooo"),
+    #         Message("admin1", "001", "yoloooo"),
+    #         Message("admin1", "001", "yoloooo"),
+    #         Message("admin1", "001", "yoloooo"),
+    #         Message("admin1", "001", "yoloooo"),
+    #         Message("admin1", "001", "yoloooo"),
+    #         Message("admin1", "001", "yoloooo"),
+    #         Message("admin1", "001", "yoloooo"),
+    #     ],
+    # ),
 ]
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/index", methods=["GET", "POST"])
 def index():
     errors = []
     # check if there is a logged in user
@@ -81,7 +42,18 @@ def index():
         session["username"] = ""
         return redirect("/register")
 
-    return render_template("index.html", username=username, channels=channels)
+    if request.method == "POST":
+        # get and validate form data
+        if not request.form.get("channel-name"):
+            errors.append("Please provide channel name")
+            pass
+        else:
+            channel_name = request.form.get("channel-name")
+            channels.append(Channel(channel_name, []))
+
+    return render_template(
+        "index.html", username=username, channels=channels, errors=errors
+    )
 
 
 @app.route("/logout", methods=["GET", "POST"])
@@ -101,6 +73,6 @@ def register():
         else:
             username = request.form.get("username")
             session["username"] = username
-            return redirect("/")
+            return redirect("/index")
 
     return render_template("register.html", errors=errors)

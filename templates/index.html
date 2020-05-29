@@ -6,10 +6,29 @@ Register
 
 {% block main %}
 Welcome {{username}}!
-Please chose a channel or <a href="">create a new one</a>
+Please chose a channel or create a new one
+
+<form action="/index"
+      method="post"
+      class="login">
+    <div>
+        <input type="text"
+               name="channel-name"
+               class="input-field rounded-corners">
+        <input class="call-to-action"
+               type="submit"
+               value="Create Channel">
+        <ul class="errors">
+            {% for error in errors %}
+            <li>{{error}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</form>
 
 {% for channel in channels %}
 <li>{{channel.name}}</li>
+
 {% endfor %}
 
 {% endblock %}
