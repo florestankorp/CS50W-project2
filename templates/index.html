@@ -27,8 +27,8 @@ Please chose a channel or create a new one
 </form>
 
 {% for channel in channels %}
-<li>{{channel.name}}</li>
-
+<a class="route-link"
+   href="{{ url_for('channel', id=channel.channel_id) }}">{{channel.name}}</a>
 {% endfor %}
 
 {% endblock %}

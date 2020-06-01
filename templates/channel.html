@@ -5,11 +5,16 @@
 {% endblock %}
 
 {% block main %}
-{% for channel in channels %}
-<li>{{channel.name}}</li>
-<li>{{message.username}}</li>
-<li>{{message.timestamp}}</li>
-<li>{{message.content}}</li>
+{% for message in channel.messages %}
+<p>
+    <span>{{message.username}}</span>
+    <span>{{message.timestamp}}</span>
+</p>
+
+<p>{{message.content}}</p>
 {% endfor %}
+
+<input data-channel_id="{{channel.channel_id}}">
+<button>Send</button>
 
 {% endblock %}

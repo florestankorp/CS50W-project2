@@ -49,7 +49,8 @@ def index():
             pass
         else:
             channel_name = request.form.get("channel-name")
-            channels.append(Channel(channel_name, []))
+            new_channel = Channel(channel_name, [])
+            channels.append(new_channel)
 
     return render_template(
         "index.html", username=username, channels=channels, errors=errors
@@ -60,6 +61,22 @@ def index():
 def logout():
     session.clear()
     return redirect("/register")
+
+
+@app.route("/channel/<int:id>", methods=["GET", "POST"])
+def channel(id):
+    errors = []
+    if not len(channels) > 0:
+        return redirect("/index")
+
+    for channel in channels:
+        if channel.channel_id == id:
+            this_channel = channel
+            break
+        # else:
+        #     return redirect("/index")
+    print(this_channel.messages)
+    return render_template("channel.html", errors=errors, channel=this_channel)
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -76,3 +93,30 @@ def register():
             return redirect("/index")
 
     return render_template("register.html", errors=errors)
+
+
+@socketio.on("message sent")
+def handle_message(data):
+    # check if there is a logged in user
+    try:
+        username = session["username"]
+        pass
+    except KeyError:
+        session["username"] = ""
+        return redirect("/register")
+
+    message = data["message"]
+    id = int(data["channel_id"])
+
+    for channel in channels:
+        if channel.channel_id == id:
+            channel.messages.append(Message(username, message))
+            break
+
+
+# @socketio.on("submit vote")
+# def vote(data):
+#     selection = data["selection"]
+#     votes[selection] += 1
+#     emit("vote totals", votes, broadcast=True)
+#     print(data)

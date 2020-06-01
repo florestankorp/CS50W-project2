@@ -1,13 +1,19 @@
+import datetime
+
+datetime.date.today()
+
+
 class Channel:
     def __init__(self, name, messages):
+        self.channel_id = id(self)
         self.name = name
         self.messages = messages
 
 
 class Message:
-    def __init__(self, username, timestamp, content):
+    def __init__(self, username, content):
         self.username = username
-        self.timestamp = timestamp
+        self.timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
         self.content = content
 
 
