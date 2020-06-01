@@ -19,6 +19,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   socket.on('messages', (data) => {
-    document.querySelector('#message').innerHTML = data.message;
+    console.log(data);
+
+    data.map(({ content, username, timestamp }) => {
+      console.log(content);
+      console.log(username);
+      console.log(timestamp);
+    });
+
+    // document.querySelector('#message').innerHTML = data.message;
   });
 });

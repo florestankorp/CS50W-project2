@@ -1,3 +1,4 @@
+import json
 import os
 
 from flask import Flask, redirect, render_template, request, session
@@ -73,9 +74,7 @@ def channel(id):
         if channel.channel_id == id:
             this_channel = channel
             break
-        # else:
-        #     return redirect("/index")
-    print(this_channel.messages)
+
     return render_template("channel.html", errors=errors, channel=this_channel)
 
 
@@ -97,6 +96,8 @@ def register():
 
 @socketio.on("message sent")
 def handle_message(data):
+    messages = []
+
     # check if there is a logged in user
     try:
         username = session["username"]
@@ -113,10 +114,9 @@ def handle_message(data):
             channel.messages.append(Message(username, message))
             break
 
+    # convert Message class instance to object
+    for message in channel.messages:
+        formated_message = message.__dict__
+        messages.append(formated_message)
 
-# @socketio.on("submit vote")
-# def vote(data):
-#     selection = data["selection"]
-#     votes[selection] += 1
-#     emit("vote totals", votes, broadcast=True)
-#     print(data)
+    emit("messages", messages, broadcast=True)

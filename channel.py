@@ -1,4 +1,5 @@
 import datetime
+import json
 
 datetime.date.today()
 
@@ -15,6 +16,9 @@ class Message:
         self.username = username
         self.timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
         self.content = content
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
 
 # channels = [
