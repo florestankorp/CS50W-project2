@@ -104,7 +104,7 @@ textarea {
     margin-top: 5px;
 }
 
-ul {
+ul, .error {
     padding: 0;
     list-style: none;
     color: crimson;

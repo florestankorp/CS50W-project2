@@ -15,24 +15,11 @@ socketio = SocketIO(app)
 app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
-channels = [
-    # Channel(
-    #     "channel 1",
-    #     [
-    #         Message("admin1", "001", "yoloooo"),
-    #         Message("admin1", "001", "yoloooo"),
-    #         Message("admin1", "001", "yoloooo"),
-    #         Message("admin1", "001", "yoloooo"),
-    #         Message("admin1", "001", "yoloooo"),
-    #         Message("admin1", "001", "yoloooo"),
-    #         Message("admin1", "001", "yoloooo"),
-    #         Message("admin1", "001", "yoloooo"),
-    #     ],
-    # ),
-]
+
+channels = []
 
 
-@app.route("/index", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def index():
     errors = []
     # check if there is a logged in user
@@ -68,12 +55,17 @@ def logout():
 def channel(id):
     errors = []
     if not len(channels) > 0:
-        return redirect("/index")
+        return redirect("/")
 
     for channel in channels:
         if channel.channel_id == id:
             this_channel = channel
             break
+        else:
+            this_channel = None
+
+    if this_channel is None:
+        return redirect("/")
 
     return render_template("channel.html", errors=errors, channel=this_channel)
 
@@ -89,7 +81,7 @@ def register():
         else:
             username = request.form.get("username")
             session["username"] = username
-            return redirect("/index")
+            return redirect("/")
 
     return render_template("register.html", errors=errors)
 
