@@ -54,6 +54,13 @@ def logout():
 @app.route("/channel/<int:id>", methods=["GET", "POST"])
 def channel(id):
     errors = []
+    # check if there is a logged in user
+    try:
+        username = session["username"]
+        pass
+    except KeyError:
+        session["username"] = ""
+        return redirect("/register")
     if not len(channels) > 0:
         return redirect("/")
 
@@ -107,6 +114,7 @@ def handle_message(data):
             break
 
     # convert Message class instance to object
+    # TODO: validate message length
     for message in channel.messages:
         formated_message = message.__dict__
         messages.append(formated_message)

@@ -5,8 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   socket.on('connect', () => {
-    document.querySelectorAll('button').forEach((button) => {
+    const button = document.querySelector('#sendButton');
+
+    if (button) {
       button.onclick = () => {
+        errorsNode.textContent = '';
         const inputFieldEl = document.querySelector('input');
         const message = inputFieldEl.value;
         const channel_id = inputFieldEl.dataset.channel_id;
@@ -22,30 +25,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         inputFieldEl.value = '';
       };
-    });
+    }
   });
 
   socket.on('messages', (data) => {
+    const lastMessage = data[data.length - 1];
     const messagesNode = document.querySelector('#messages');
-    messagesNode.appendChild(createMessageListItem(data[data.length - 1]));
+    const node = `
+    <div>
+        <p>
+            <span>${lastMessage.username}</span>
+            <span>${lastMessage.timestamp}</span>
+        </p>
+        <p>${lastMessage.content}</p>
+    </div>
+    `;
+
+    messagesNode.innerHTML += node;
   });
 });
-
-function createMessageListItem(data) {
-  let list = document.createElement('div');
-  let info = document.createElement('p');
-  let contentItem = document.createElement('p');
-  let usernameItem = document.createElement('span');
-  let timestampItem = document.createElement('span');
-
-  usernameItem.textContent = data.username;
-  timestampItem.textContent = data.timestamp;
-  contentItem.textContent = data.content;
-
-  info.appendChild(usernameItem);
-  info.appendChild(timestampItem);
-  list.appendChild(info);
-  list.appendChild(contentItem);
-
-  return list;
-}
