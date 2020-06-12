@@ -17,11 +17,18 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 channels = []
+global_channel_errors = []
+
+"""
+TODO:
+* remembering last visited channel after closing and re-opening browser
+"""
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     errors = []
+    channel_exists = False
     # check if there is a logged in user
     try:
         username = session["username"]
@@ -37,8 +44,15 @@ def index():
             pass
         else:
             channel_name = request.form.get("channel-name")
-            new_channel = Channel(channel_name, [])
-            channels.append(new_channel)
+            for channel in channels:
+                if channel.name == channel_name:
+                    channel_exists = True
+                    errors.append("Channel already exists")
+                    break
+
+            if not channel_exists:
+                new_channel = Channel(channel_name, [])
+                channels.append(new_channel)
 
     return render_template(
         "index.html", username=username, channels=channels, errors=errors
@@ -53,10 +67,9 @@ def logout():
 
 @app.route("/channel/<int:id>", methods=["GET", "POST"])
 def channel(id):
-    errors = []
     # check if there is a logged in user
     try:
-        username = session["username"]
+        session["username"]
         pass
     except KeyError:
         session["username"] = ""
@@ -74,7 +87,9 @@ def channel(id):
     if this_channel is None:
         return redirect("/")
 
-    return render_template("channel.html", errors=errors, channel=this_channel)
+    return render_template(
+        "channel.html", errors=global_channel_errors, channel=this_channel
+    )
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -105,18 +120,34 @@ def handle_message(data):
         session["username"] = ""
         return redirect("/register")
 
-    message = data["message"]
-    id = int(data["channel_id"])
+    if data["message"] == "":
+        global_channel_errors.append("Please enter a message")
+        pass
+    else:
+        # clear errors array on success
+        del global_channel_errors[:]
 
-    for channel in channels:
-        if channel.channel_id == id:
-            channel.messages.append(Message(username, message))
-            break
+        # get message from html data attribute through JS
+        message = data["message"]
 
-    # convert Message class instance to object
-    # TODO: validate message length
-    for message in channel.messages:
-        formated_message = message.__dict__
-        messages.append(formated_message)
+        # get channel_id from html data attribute through JS
+        id = int(data["channel_id"])
+
+        for channel in channels:
+            if channel.channel_id == id:
+                # store only last 100 messages serverside
+                if len(channel.messages) >= 100:
+                    channel.messages.remove(channel.messages[0])
+                    channel.messages.append(Message(username, message))
+                    break
+                else:
+                    channel.messages.append(Message(username, message))
+                    break
+
+        # convert Message class instance to object
+        # TODO: validate message length
+        for message in channel.messages:
+            formated_message = message.__dict__
+            messages.append(formated_message)
 
     emit("messages", messages, broadcast=True)

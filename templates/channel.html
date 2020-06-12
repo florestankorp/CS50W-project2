@@ -7,17 +7,16 @@
 {% block main %}
 <div id="messages">
     {% for message in channel.messages %}
-    <div class="message">
-        <p>
-            <span>{{message.username}}</span>
-            <span>{{message.timestamp}}</span>
+    <div class="message rounded-corners">
+        <p class="message-info">
+            <span class="message-username">{{message.username}}</span>
+            <span class="message-timestamp">{{message.timestamp}}</span>
         </p>
-        <p>{{message.content}}</p>
+        <p class="message-content">{{message.content}}</p>
     </div>
     {% endfor %}
 </div>
 <form action="">
-
     <input class="input-field rounded-corners"
            id="messageField"
            data-channel_id="{{channel.channel_id}}"
@@ -28,6 +27,6 @@
            value="Send">
 </form>
 
-<p class="error"></p>
+<p class="error">{{errors[0]}}</p>
 
 {% endblock %}

@@ -9,20 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (button) {
       button.onclick = () => {
-        errorsNode.textContent = '';
         const inputFieldEl = document.querySelector('input');
         const message = inputFieldEl.value;
         const channel_id = inputFieldEl.dataset.channel_id;
 
-        if (message === '') {
-          errorsNode.textContent = 'Please enter a message';
-        } else {
-          socket.emit('message sent', {
-            message,
-            channel_id,
-          });
-        }
-
+        socket.emit('message sent', {
+          message,
+          channel_id,
+        });
         inputFieldEl.value = '';
       };
     }
@@ -32,14 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const lastMessage = data[data.length - 1];
     const messagesNode = document.querySelector('#messages');
     const node = `
-    <div>
-        <p>
-            <span>${lastMessage.username}</span>
-            <span>${lastMessage.timestamp}</span>
+    <div class="message rounded-corners">
+        <p class="message-info">
+            <span class="message-username">${lastMessage.username}</span>
+            <span class="message-timestamp">${lastMessage.timestamp}</span>
         </p>
-        <p>${lastMessage.content}</p>
-    </div>
-    `;
+        <p class="message-content">${lastMessage.content}</p>
+    </div>`;
 
     messagesNode.innerHTML += node;
   });

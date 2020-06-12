@@ -173,3 +173,10 @@ input[type=submit]:hover {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+.message {
+    /* border: black solid 1px;
+    border-radius: 5px; */
+    padding: 6px;
+    margin-bottom: 20px;
+}
