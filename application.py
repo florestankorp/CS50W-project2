@@ -1,7 +1,8 @@
 import json
 import os
+import re
 
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 from flask_session import Session
 from flask_socketio import SocketIO, emit
 
@@ -31,15 +32,19 @@ def index():
     channel_exists = False
 
     # check if there is a logged in user
-    if not session["user"] == "":
+    if "user" in session and not session["user"] == "":
         user = session["user"]
         pass
     else:
         session["user"] = {}
         return redirect("/register")
 
-    # if hasattr(user, "last_visit"):
-    # return redirect(url_for("channel", id=user.last_visit))
+    # check if referrer is channel to determine if navigation to previous session should be restored
+    print(re.search("/channel", request.referrer))
+    match = re.search("/channel", request.referrer)
+
+    if not match is None:
+        return redirect(url_for("channel", id=user["last_visit"]))
 
     if request.method == "POST":
         # get and validate form data
