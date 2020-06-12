@@ -6,28 +6,29 @@
 
 {% block main %}
 <h2>{{channel.name}}</h2>
-<div id="messages">
-    {% for message in channel.messages %}
-    <div class="message rounded-corners">
-        <p class="message-info">
-            <span class="message-username">{{message.username}}</span>
-            <span class="message-timestamp">{{message.timestamp}}</span>
-        </p>
-        <p class="message-content">{{message.content}}</p>
+<div class="message-container">
+    <div class="messages">
+        {% for message in channel.messages %}
+        <div class="message rounded-corners">
+            <p class="message-info">
+                <span class="message-username">{{message.username}}</span>
+                <span class="message-timestamp">{{message.timestamp}}</span>
+            </p>
+            <p class="message-content">{{message.content}}</p>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
+    <form class="input">
+        <input class="input-field rounded-corners"
+               id="messageField"
+               data-channel_id="{{channel.channel_id}}"
+               autofocus>
+        <input class=" search-button call-to-action"
+               type="submit"
+               id="sendButton"
+               value="Send">
+    </form>
+
+    <p class="error">{{errors[0]}}</p>
 </div>
-<form action="">
-    <input class="input-field rounded-corners"
-           id="messageField"
-           data-channel_id="{{channel.channel_id}}"
-           autofocus>
-    <input class="search-button call-to-action"
-           type="submit"
-           id="sendButton"
-           value="Send">
-</form>
-
-<p class="error">{{errors[0]}}</p>
-
 {% endblock %}

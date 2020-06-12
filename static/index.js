@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const errorsNode = document.querySelector('.error');
+  const messagesNode = document.querySelector('.messages');
+  messagesNode.scrollTop = messagesNode.scrollHeight;
+
   const socket = io.connect(
     location.protocol + '//' + document.domain + ':' + location.port
   );
@@ -24,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   socket.on('messages', (data) => {
     const lastMessage = data[data.length - 1];
-    const messagesNode = document.querySelector('#messages');
+    const messagesNode = document.querySelector('.messages');
     const node = `
     <div class="message rounded-corners">
         <p class="message-info">

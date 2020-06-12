@@ -39,12 +39,19 @@ def index():
         session["user"] = {}
         return redirect("/register")
 
-    # check if referrer is channel to determine if navigation to previous session should be restored
-    print(re.search("/channel", request.referrer))
-    match = re.search("/channel", request.referrer)
-
-    if not match is None:
+    if request.referrer is None:
         return redirect(url_for("channel", id=user["last_visit"]))
+
+    # # check if referrer is channel to determine if navigation to previous session should be restored when user starts up browser
+    # if not request.referrer is None:
+    #     # does the navigation come from a channel?
+    #     match = re.search("/channel", request.referrer)
+    #     # pass
+    #     print(match is None)
+
+    #     # if not, then navigate to the last known channel
+    #     if match is None and not user["last_visit"] == "0":
+    #         return redirect(url_for("channel", id=user["last_visit"]))
 
     if request.method == "POST":
         # get and validate form data
@@ -113,7 +120,10 @@ def register():
             pass
         else:
             username = request.form.get("username")
-            session["user"] = {"name": username}
+            session["user"] = {
+                "name": username,
+                "last_visit": "",
+            }
             return redirect("/")
 
     return render_template("register.html", errors=errors)
