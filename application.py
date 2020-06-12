@@ -29,13 +29,17 @@ TODO:
 def index():
     errors = []
     channel_exists = False
+
     # check if there is a logged in user
-    try:
-        username = session["username"]
+    if not session["user"] == "":
+        user = session["user"]
         pass
-    except KeyError:
-        session["username"] = ""
+    else:
+        session["user"] = {}
         return redirect("/register")
+
+    # if hasattr(user, "last_visit"):
+    # return redirect(url_for("channel", id=user.last_visit))
 
     if request.method == "POST":
         # get and validate form data
@@ -54,9 +58,7 @@ def index():
                 new_channel = Channel(channel_name, [])
                 channels.append(new_channel)
 
-    return render_template(
-        "index.html", username=username, channels=channels, errors=errors
-    )
+    return render_template("index.html", user=user, channels=channels, errors=errors)
 
 
 @app.route("/logout", methods=["GET", "POST"])
@@ -69,11 +71,12 @@ def logout():
 def channel(id):
     # check if there is a logged in user
     try:
-        session["username"]
+        user = session["user"]
         pass
     except KeyError:
-        session["username"] = ""
+        session["user"] = {}
         return redirect("/register")
+
     if not len(channels) > 0:
         return redirect("/")
 
@@ -86,6 +89,9 @@ def channel(id):
 
     if this_channel is None:
         return redirect("/")
+
+    # remember this channel as the last one visited by the user
+    session["user"] = {"name": user["name"], "last_visit": id}
 
     return render_template(
         "channel.html", errors=global_channel_errors, channel=this_channel
@@ -102,7 +108,7 @@ def register():
             pass
         else:
             username = request.form.get("username")
-            session["username"] = username
+            session["user"] = {"name": username}
             return redirect("/")
 
     return render_template("register.html", errors=errors)
@@ -114,10 +120,10 @@ def handle_message(data):
 
     # check if there is a logged in user
     try:
-        username = session["username"]
+        user = session["user"]
         pass
     except KeyError:
-        session["username"] = ""
+        session["user"] = {}
         return redirect("/register")
 
     if data["message"] == "":
@@ -138,10 +144,10 @@ def handle_message(data):
                 # store only last 100 messages serverside
                 if len(channel.messages) >= 100:
                     channel.messages.remove(channel.messages[0])
-                    channel.messages.append(Message(username, message))
+                    channel.messages.append(Message(user["name"], message))
                     break
                 else:
-                    channel.messages.append(Message(username, message))
+                    channel.messages.append(Message(user["name"], message))
                     break
 
         # convert Message class instance to object

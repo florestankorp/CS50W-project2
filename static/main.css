@@ -177,6 +177,24 @@ input[type=submit]:hover {
 .message {
     /* border: black solid 1px;
     border-radius: 5px; */
-    padding: 6px;
+    padding: 10px;
     margin-bottom: 20px;
+    background-color: white;
+}
+
+p.message-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+span.message-username {
+    color: cornflowerblue;
+}
+
+span.message-timestamp {
+    color: lightgray;
+}
+
+p.message-content {
+    margin-top: 10px;
 }

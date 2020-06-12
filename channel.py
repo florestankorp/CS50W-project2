@@ -14,7 +14,7 @@ class Channel:
 class Message:
     def __init__(self, username, content):
         self.username = username
-        self.timestamp = "{:%Y-%m-%d %H:%M:%S}".format(datetime.datetime.now())
+        self.timestamp = "{:%H:%M}".format(datetime.datetime.now())
         self.content = content
 
     def toJSON(self):

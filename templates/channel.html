@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block main %}
+<h2>{{channel.name}}</h2>
 <div id="messages">
     {% for message in channel.messages %}
     <div class="message rounded-corners">
